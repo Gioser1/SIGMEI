@@ -1,0 +1,361 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 24px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dashboard-header h1 {
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.dashboard-header p {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-secondary,
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-secondary {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-surface-hover);
+  border-color: var(--border-strong);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-600);
+}
+
+/* ============================================
+   GRID UNIFICADO DE WIDGETS
+   ============================================ */
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.panel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+}
+
+.panel--wide {
+  grid-column: span 2;
+}
+
+.panel__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.panel__header h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.panel__header span {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.panel__body {
+  padding: 20px;
+}
+
+.chart-placeholder {
+  min-height: 260px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  background-color: rgba(255, 255, 255, 0.015);
+}
+
+.chart-placeholder svg {
+  opacity: 0.35;
+}
+
+/* ---------- Donut chart (Estado de Equipos) ---------- */
+.donut-chart-wrap {
+  position: relative;
+}
+
+.donut-chart-center {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.donut-chart-center__value {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.donut-chart-center__label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.donut-chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.donut-chart-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.donut-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.donut-dot--success { background-color: var(--success-500); }
+.donut-dot--neutral { background-color: var(--neutral-700); }
+
+@media (max-width: 1024px) {
+  .panel--wide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 720px) {
+  .widgets-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+  .panel--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Loading & Error ---------- */
+.dashboard-loading,
+.dashboard-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 20px;
+  color: var(--text-muted);
+}
+
+.error-icon {
+  color: var(--danger-500);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-subtle);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Responsiveness ---------- */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .dashboard-actions {
+    width: 100%;
+  }
+  .dashboard-actions .btn-primary,
+  .dashboard-actions .btn-secondary {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .dashboard-actions {
+    width: 100%;
+  }
+  .dashboard-actions .btn-primary,
+  .dashboard-actions .btn-secondary {
+    flex: 1;
+    justify-content: center;
+  }
+  .metrics-list {
+    grid-template-columns: 1fr;
+  }
+}
+/* ---------- Resumen ejecutivo ---------- */
+.executive-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-lg, 12px);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+}
+
+.executive-banner__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.executive-banner__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.executive-banner__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.executive-banner__text {
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.executive-banner__count {
+  flex-shrink: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  min-width: 44px;
+  text-align: right;
+}
+
+.executive-banner--alert {
+  border-left: 3px solid var(--danger-500);
+}
+.executive-banner--alert .executive-banner__icon {
+  background-color: var(--danger-bg);
+  color: var(--danger-500);
+}
+.executive-banner--alert .executive-banner__count {
+  color: var(--danger-500);
+}
+
+.executive-banner--ok {
+  border-left: 3px solid var(--success-500);
+}
+.executive-banner--ok .executive-banner__icon {
+  background-color: var(--success-bg);
+  color: var(--success-500);
+}
+.executive-banner--ok .executive-banner__count {
+  color: var(--success-500);
+}
+
+@media (max-width: 640px) {
+  .executive-banner {
+    flex-wrap: wrap;
+  }
+  .executive-banner__count {
+    order: -1;
+    width: 100%;
+    text-align: left;
+  }
+}
+.chart-empty-state {
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background-color: rgba(255, 255, 255, 0.015);
+}

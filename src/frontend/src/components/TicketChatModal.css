@@ -1,0 +1,176 @@
+.ticket-chat-overlay {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 380px;
+  height: 520px;
+  background: var(--surface-color, #1e1e2d);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.ticket-chat-header {
+  background: linear-gradient(135deg, var(--primary-color, #4361ee), #3a0ca3);
+  color: #ffffff;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-chat-header-info h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.ticket-chat-serial-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+.ticket-chat-close-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.ticket-chat-close-btn:hover {
+  opacity: 1;
+}
+
+.ticket-chat-body {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--background-color, #12121e);
+}
+
+.chat-empty {
+  text-align: center;
+  color: var(--text-muted, #888);
+  font-size: 0.85rem;
+  margin: auto;
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+}
+
+.chat-message--mine {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.chat-message--other {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.chat-message-sender {
+  font-size: 0.7rem;
+  color: var(--text-muted, #aaa);
+  margin-bottom: 2px;
+}
+
+.chat-message-bubble {
+  padding: 0.6rem 0.9rem;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.chat-message--mine .chat-message-bubble {
+  background-color: var(--primary-color, #4361ee);
+  color: #ffffff;
+  border-bottom-right-radius: 2px;
+}
+
+.chat-message--other .chat-message-bubble {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary, #ffffff);
+  border-bottom-left-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-message-time {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 2px;
+  display: block;
+}
+
+.ticket-chat-footer {
+  display: flex;
+  gap: 8px;
+  padding: 0.75rem 1rem;
+  background: var(--surface-color, #1e1e2d);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ticket-chat-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 0.6rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.ticket-chat-input:focus {
+  border-color: var(--primary-color, #4361ee);
+}
+
+.ticket-chat-send-btn {
+  background: var(--primary-color, #4361ee);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.ticket-chat-send-btn:hover {
+  transform: scale(1.05);
+}

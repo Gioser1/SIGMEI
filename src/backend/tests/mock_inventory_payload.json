@@ -1,0 +1,77 @@
+{
+  "cpu": {
+    "modelo": "AMD Ryzen 5 5600X 6-Core Processor",
+    "fabricante": "Advanced Micro Devices, Inc.",
+    "nucleos": 6,
+    "hilos": 12,
+    "frecuencia_base": 3.7,
+    "socket": "AM4",
+    "tdp": 65,
+    "cache": "L3: 32MB"
+  },
+  "motherboard": {
+    "fabricante": "ASUSTeK COMPUTER INC.",
+    "modelo": "ROG STRIX B550-F GAMING",
+    "chipset": "AMD B550",
+    "socket": "AM4",
+    "bios_version": "2803"
+  },
+  "ram": [
+    {
+      "banco_slot": "DIMM_A2",
+      "capacidad_gb": 8,
+      "velocidad_mhz": 3200,
+      "tipo": "DDR4",
+      "fabricante": "Corsair",
+      "numero_serie": "00000001"
+    },
+    {
+      "banco_slot": "DIMM_B2",
+      "capacidad_gb": 8,
+      "velocidad_mhz": 3200,
+      "tipo": "DDR4",
+      "fabricante": "Corsair",
+      "numero_serie": "00000002"
+    }
+  ],
+  "gpu": [
+    {
+      "modelo": "NVIDIA GeForce RTX 3060",
+      "fabricante": "NVIDIA",
+      "vram_gb": 12,
+      "pcie_version": "PCIe 4.0 x16"
+    }
+  ],
+  "discos": [
+    {
+      "modelo": "Samsung SSD 980 PRO 1TB",
+      "fabricante": "Samsung",
+      "capacidad_gb": 1000,
+      "tipo": "NVMe",
+      "interfaz": "PCIe",
+      "numero_serie": "S5GXNF0R123456"
+    },
+    {
+      "modelo": "WDC WD20EZBX-00AYRA0",
+      "fabricante": "Western Digital",
+      "capacidad_gb": 2000,
+      "tipo": "HDD",
+      "interfaz": "SATA",
+      "numero_serie": "WD-WCC4N2F1234"
+    }
+  ],
+  "software": [
+    {
+      "nombre": "Google Chrome",
+      "version": "114.0.5735.199",
+      "editor": "Google LLC",
+      "fecha_instalacion": "2023-01-15"
+    },
+    {
+      "nombre": "Visual Studio Code",
+      "version": "1.79.2",
+      "editor": "Microsoft Corporation",
+      "fecha_instalacion": "2023-02-10"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg-base);
+}
+
+.app-main-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0; /* Important for preventing flex children from overflowing */
+}
+
+.app-main-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 32px 40px;
+  background-color: var(--bg-base);
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .app-main-content {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-main-content {
+    padding: 16px;
+  }
+}

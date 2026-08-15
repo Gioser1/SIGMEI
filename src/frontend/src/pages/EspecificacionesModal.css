@@ -1,0 +1,265 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.specs-modal {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle, var(--border-color));
+  border-radius: var(--radius-lg, 12px);
+  width: 100%;
+  max-width: 720px;
+  max-height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-subtle, var(--border-color));
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-surface);
+  z-index: 2;
+}
+
+.modal-header h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: hsl(var(--text-primary));
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: hsl(var(--text-secondary));
+  font-size: 1.125rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-md, 8px);
+  transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+  background-color: var(--bg-surface-hover);
+  color: hsl(var(--text-primary));
+}
+
+.specs-modal__equipo-select {
+  padding: 20px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.specs-modal__equipo-select label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: hsl(var(--text-secondary));
+}
+
+.specs-modal__equipo-select select {
+  background: hsla(220, 20%, 10%, 0.5);
+  border: 1px solid var(--border-color);
+  color: hsl(var(--text-primary));
+  padding: 10px 14px;
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.875rem;
+}
+
+.specs-modal__tabs {
+  display: flex;
+  gap: 4px;
+  padding: 20px 24px 0;
+  border-bottom: 1px solid var(--border-subtle, var(--border-color));
+}
+
+.specs-tab {
+  background: none;
+  border: none;
+  color: hsl(var(--text-secondary));
+  padding: 10px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.specs-tab:hover {
+  color: hsl(var(--text-primary));
+}
+
+.specs-tab.active {
+  color: hsl(var(--primary));
+  border-bottom-color: hsl(var(--primary));
+}
+
+.specs-modal__body {
+  padding: 20px 24px 24px;
+}
+
+.specs-loading,
+.specs-empty {
+  color: hsl(var(--text-secondary));
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.spec-card {
+  background-color: hsla(220, 20%, 10%, 0.4);
+  border: 1px solid var(--border-subtle, var(--border-color));
+  border-radius: var(--radius-md, 8px);
+  padding: 16px;
+}
+
+.spec-card h4 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: hsl(var(--primary));
+  margin-bottom: 10px;
+}
+
+.spec-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spec-card li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  gap: 12px;
+}
+
+.spec-label {
+  color: hsl(var(--text-secondary));
+  text-transform: capitalize;
+}
+
+.spec-value {
+  color: hsl(var(--text-primary));
+  font-weight: 500;
+  text-align: right;
+}
+
+/* ---------- Formulario de problema ---------- */
+.problema-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.problema-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: hsl(var(--text-secondary));
+}
+
+.problema-form select,
+.problema-form textarea {
+  background: hsla(220, 20%, 10%, 0.5);
+  border: 1px solid var(--border-color);
+  color: hsl(var(--text-primary));
+  padding: 10px 14px;
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.875rem;
+  font-family: var(--font-body);
+  resize: vertical;
+}
+
+.problema-form select:focus,
+.problema-form textarea:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px hsla(var(--primary), 0.15);
+}
+
+.diagnostico-error {
+  margin-top: 12px;
+  color: hsl(var(--danger));
+  font-size: 0.8125rem;
+}
+
+.diagnostico-resultado {
+  margin-top: 20px;
+  padding: 18px;
+  background-color: hsla(220, 20%, 10%, 0.4);
+  border: 1px solid var(--border-subtle, var(--border-color));
+  border-radius: var(--radius-md, 8px);
+}
+
+.diagnostico-resultado h4 {
+  font-size: 0.9375rem;
+  color: hsl(var(--text-primary));
+  margin-bottom: 10px;
+}
+
+.diagnostico-resultado h5 {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: hsl(var(--text-secondary));
+  margin: 14px 0 8px;
+}
+
+.diagnostico-causa {
+  font-size: 0.875rem;
+  color: hsl(var(--text-primary));
+}
+
+.diagnostico-resultado ol {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: hsl(var(--text-primary));
+}
+
+.urgencia-badge {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.urgencia-baja { background: hsla(var(--success), 0.15); color: hsl(var(--success)); }
+.urgencia-media { background: hsla(var(--warning), 0.15); color: hsl(var(--warning)); }
+.urgencia-alta { background: hsla(var(--danger), 0.15); color: hsl(var(--danger)); }
+
+.diagnostico-disclaimer {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  color: hsl(var(--text-secondary));
+  font-style: italic;
+}

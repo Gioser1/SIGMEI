@@ -1,0 +1,51 @@
+.mantenimientos-container {
+  padding: 20px;
+}
+
+.mantenimientos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.mantenimientos-header h1 {
+  font-size: 24px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Badges para tipo de mantenimiento */
+.badge.tipo-preventivo {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.badge.tipo-correctivo {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+/* Badges para estados de mantenimiento */
+.badge.estado-pendiente {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.badge.estado-en_progreso {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.badge.estado-completado {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+@media (max-width: 768px) {
+  .mantenimientos-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
