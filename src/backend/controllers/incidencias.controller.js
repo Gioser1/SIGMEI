@@ -177,17 +177,67 @@ const crearIncidencia = catchAsync(async (req, res) => {
         ]
     );
 
+    const nuevaId = resultado.insertId;
+
+    // Obtener la incidencia creada con nombres reales
+    const [incRows] = await db.query(
+        `SELECT
+            i.id,
+            i.equipo_id,
+            e.nombre AS equipo_nombre,
+            e.serial AS equipo_serial,
+            i.usuario_id,
+            u.nombre AS usuario_nombre,
+            i.titulo,
+            i.descripcion,
+            i.prioridad,
+            i.estado,
+            i.fecha_creacion
+        FROM incidencias i
+        INNER JOIN equipos e ON i.equipo_id = e.id
+        INNER JOIN usuarios u ON i.usuario_id = u.id
+        WHERE i.id = ?`,
+        [nuevaId]
+    );
+
+    const incCreada = incRows[0] || {};
+
+    // Emitir nueva incidencia vía WebSocket a los técnicos
+    const io = req.app.get('io');
+    if (io) {
+        io.to('tecnicos').emit('nueva_notificacion', {
+            tipo: 'incidencia',
+            titulo: 'Nueva Incidencia Reportada',
+            mensaje: `${incCreada.usuario_nombre} reportó: "${incCreada.titulo}" — Prioridad: ${incCreada.prioridad}`,
+            data: incCreada,
+            timestamp: new Date().toISOString()
+        });
+
+        io.to('tecnicos').emit('nueva_incidencia', {
+            id: `inc_${nuevaId}`,
+            incidencia_id_real: nuevaId,
+            usuario_id: incCreada.usuario_id,
+            nombre: incCreada.usuario_nombre,
+            correo: incCreada.titulo,
+            equipo_serial: incCreada.equipo_serial || incCreada.equipo_nombre,
+            serial_real: incCreada.equipo_serial,
+            prioridad: incCreada.prioridad,
+            titulo: incCreada.titulo,
+            timestamp: incCreada.fecha_creacion
+        });
+    }
+
     // Registrar auditoría
     await registrarAccion(
         req.usuario.id,
         'Creación de incidencia',
         'incidencias',
-        `Se creó la incidencia "${titulo}" (ID: ${resultado.insertId}) para el equipo ID ${equipo_id}`
+        `Se creó la incidencia "${titulo}" (ID: ${nuevaId}) para el equipo ID ${equipo_id}`
     );
 
     res.status(201).json({
         mensaje: 'Incidencia creada correctamente',
-        id: resultado.insertId
+        id: nuevaId
     });
 });
 
@@ -299,6 +349,35 @@ const actualizarIncidencia = catchAsync(async (req, res) => {
             }
         } catch (chatErr) {
             console.warn('Error insertando mensaje de cierre en chat:', chatErr.message);
+        }
+    }
+
+    // Emitir evento de incidencia actualizada a todos los sockets conectados
+    const io = req.app.get('io');
+    if (io) {
+        const [incActualizada] = await db.query(
+            `SELECT
+                i.id,
+                i.equipo_id,
+                e.nombre AS equipo_nombre,
+                e.serial AS equipo_serial,
+                i.usuario_id,
+                u.nombre AS usuario_nombre,
+                i.titulo,
+                i.descripcion,
+                i.prioridad,
+                i.estado,
+                i.fecha_creacion
+            FROM incidencias i
+            INNER JOIN equipos e ON i.equipo_id = e.id
+            INNER JOIN usuarios u ON i.usuario_id = u.id
+            WHERE i.id = ?`,
+            [id]
+        );
+
+        if (incActualizada.length > 0) {
+            const dataInc = incActualizada[0];
+            io.emit('incidencia_actualizada', dataInc);
         }
     }
 

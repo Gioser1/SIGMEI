@@ -58,6 +58,12 @@ const crearMensaje = catchAsync(async (req, res) => {
         [resultado.insertId]
     );
 
+    // Emitir mensaje por WebSocket a la sala del chat
+    const io = req.app.get('io');
+    if (io && nuevo.length > 0) {
+        io.to(`chat_${incidencia_id}`).emit('nuevo_mensaje', nuevo[0]);
+    }
+
     res.status(201).json(nuevo[0]);
 });
 

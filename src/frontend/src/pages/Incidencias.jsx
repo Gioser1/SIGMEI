@@ -52,15 +52,19 @@ const Incidencias = () => {
     fetchIncidencias();
   }, [page, search, user]);
 
-  // Escuchar incidencias creadas en tiempo real vía WebSocket
+  // Escuchar incidencias creadas o actualizadas en tiempo real vía WebSocket
   useEffect(() => {
     if (!socket) return;
-    const handleNuevaIncidencia = () => {
+    const handleUpdate = () => {
       console.log('🔄 Actualizando lista de incidencias en tiempo real...');
       fetchIncidencias();
     };
-    socket.on('nueva_incidencia', handleNuevaIncidencia);
-    return () => socket.off('nueva_incidencia', handleNuevaIncidencia);
+    socket.on('nueva_incidencia', handleUpdate);
+    socket.on('incidencia_actualizada', handleUpdate);
+    return () => {
+      socket.off('nueva_incidencia', handleUpdate);
+      socket.off('incidencia_actualizada', handleUpdate);
+    };
   }, [socket, page, search, user]);
 
   const handleSearchChange = (e) => {

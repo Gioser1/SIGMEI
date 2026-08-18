@@ -82,26 +82,40 @@ const [connectError, setConnectError] = useState('');
 
     const handleNuevaIncidencia = (data) => {
       setSolicitudesActivas(prev => {
+        const realId = data.incidencia_id_real || data.id;
         const item = {
-          id: `inc_${Date.now()}`,
-          nombre: data.usuario_nombre || 'Usuario',
+          id: `inc_${realId}`,
+          incidencia_id_real: realId,
+          usuario_id: data.usuario_id,
+          nombre: data.usuario_nombre || data.nombre || 'Usuario',
           correo: data.titulo || 'Incidencia Reportada',
-          equipo_serial: data.equipo_serial || data.equipo_nombre || 'Sin serial',
+          equipo_serial: data.equipo_serial || data.serial_real || data.equipo_nombre || 'Sin serial',
+          serial_real: data.serial_real || data.equipo_serial,
           titulo: data.titulo,
           prioridad: data.prioridad,
           timestamp: data.timestamp || new Date().toISOString()
         };
-        if (prev.find(s => s.titulo === item.titulo && s.nombre === item.nombre)) return prev;
+        if (prev.find(s => s.id === item.id)) return prev;
         return [item, ...prev];
       });
     };
 
+    const handleIncidenciaActualizada = (data) => {
+      const estadoLower = (data.estado || '').toLowerCase();
+      // Si la incidencia se resolvió o cerró, removerla de las solicitudes activas abiertas
+      if (estadoLower === 'resuelta' || estadoLower === 'cerrada') {
+        setSolicitudesActivas(prev => prev.filter(s => s.incidencia_id_real !== data.id && s.id !== `inc_${data.id}`));
+      }
+    };
+
     socket.on('solicitud_soporte', handleSolicitud);
     socket.on('nueva_incidencia', handleNuevaIncidencia);
+    socket.on('incidencia_actualizada', handleIncidenciaActualizada);
 
     return () => {
       socket.off('solicitud_soporte', handleSolicitud);
       socket.off('nueva_incidencia', handleNuevaIncidencia);
+      socket.off('incidencia_actualizada', handleIncidenciaActualizada);
     };
   }, [socket, user]);
 

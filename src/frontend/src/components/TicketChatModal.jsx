@@ -18,6 +18,9 @@ const TicketChatModal = ({ incidencia, onClose }) => {
   const { socket } = useContext(SocketContext) || {};
   const [mensajes, setMensajes] = useState([]);
   const [nuevoMensaje, setNuevoMensaje] = useState('');
+  const [isClosed, setIsClosed] = useState(
+    (incidencia.estado || '').toLowerCase() === 'resuelta' || (incidencia.estado || '').toLowerCase() === 'cerrada'
+  );
   const messagesEndRef = useRef(null);
 
   // ID numérico real para la BD y las salas de WebSocket
@@ -43,7 +46,12 @@ const TicketChatModal = ({ incidencia, onClose }) => {
 
     api.get(`/incidencias/${incidenciaId}/mensajes`)
       .then(res => {
-        setMensajes(res.data || []);
+        const msgs = res.data || [];
+        setMensajes(msgs);
+        // Si ya hay un mensaje de cierre en la BD, marcar como cerrado
+        if (msgs.some(m => m.es_cierre || (m.mensaje && m.mensaje.includes('Incidencia finalizada')))) {
+          setIsClosed(true);
+        }
         setTimeout(scrollToBottom, 150);
       })
       .catch(err => console.warn('Error cargando mensajes:', err));
@@ -53,7 +61,7 @@ const TicketChatModal = ({ incidencia, onClose }) => {
     }
   }, [incidenciaId, socket, scrollToBottom]);
 
-  // Escuchar mensajes en tiempo real vía WebSocket
+  // Escuchar mensajes y eventos de cierre en tiempo real vía WebSocket
   useEffect(() => {
     if (!socket || !incidenciaId) return;
 
@@ -61,23 +69,36 @@ const TicketChatModal = ({ incidencia, onClose }) => {
       const msgIncId = extraerIdNumerico(msg.incidencia_id);
       if (msgIncId === incidenciaId) {
         setMensajes(prev => {
-          // Evitar duplicados por ID real o por ID temporal
           if (msg.id && prev.find(m => m.id === msg.id)) return prev;
-          // Reemplazar mensaje temporal del remitente si existe
           const sinTemp = prev.filter(m => !(m._temp && m.remitente_id === msg.remitente_id && m.mensaje === msg.mensaje));
           return [...sinTemp, msg];
         });
+        if (msg.es_cierre || (msg.mensaje && msg.mensaje.includes('Incidencia finalizada'))) {
+          setIsClosed(true);
+        }
         setTimeout(scrollToBottom, 100);
       }
     };
 
+    const handleChatFinalizado = (data) => {
+      const targetId = extraerIdNumerico(data.incidencia_id);
+      if (targetId === incidenciaId) {
+        setIsClosed(true);
+      }
+    };
+
     socket.on('nuevo_mensaje', handleNuevoMensaje);
-    return () => socket.off('nuevo_mensaje', handleNuevoMensaje);
+    socket.on('chat_finalizado', handleChatFinalizado);
+
+    return () => {
+      socket.off('nuevo_mensaje', handleNuevoMensaje);
+      socket.off('chat_finalizado', handleChatFinalizado);
+    };
   }, [socket, incidenciaId, scrollToBottom]);
 
   const handleSend = (e) => {
     e.preventDefault();
-    if (!nuevoMensaje.trim() || !user || !incidenciaId) return;
+    if (isClosed || !nuevoMensaje.trim() || !user || !incidenciaId) return;
 
     const msgText = nuevoMensaje.trim();
     setNuevoMensaje('');
@@ -126,7 +147,7 @@ const TicketChatModal = ({ incidencia, onClose }) => {
     <div className="ticket-chat-overlay">
       <div className="ticket-chat-header">
         <div className="ticket-chat-header-info">
-          <h4>💬 {titulo}</h4>
+          <h4>💬 {titulo} {isClosed && <span style={{ fontSize: '0.75rem', color: '#ffc107', marginLeft: '6px' }}>(Finalizado)</span>}</h4>
           <span className="ticket-chat-serial-badge">PC: {serial}</span>
         </div>
         <button className="ticket-chat-close-btn" onClick={onClose} title="Cerrar chat">
@@ -141,6 +162,16 @@ const TicketChatModal = ({ incidencia, onClose }) => {
           </div>
         ) : (
           mensajes.map((msg, index) => {
+            const isClosureMsg = msg.es_cierre || (msg.mensaje && msg.mensaje.includes('Incidencia finalizada'));
+            if (isClosureMsg) {
+              return (
+                <div key={msg.id || index} className="chat-closure-banner">
+                  <div className="chat-closure-icon">🔒</div>
+                  <div className="chat-closure-text">{msg.mensaje}</div>
+                </div>
+              );
+            }
+
             const isMine = msg.remitente_id === user?.id;
             return (
               <div
@@ -160,6 +191,11 @@ const TicketChatModal = ({ incidencia, onClose }) => {
             );
           })
         )}
+        {isClosed && (
+          <div className="chat-closed-notice">
+            🔒 Este chat ha sido finalizado. Gracias por utilizar el soporte técnico.
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
@@ -167,12 +203,13 @@ const TicketChatModal = ({ incidencia, onClose }) => {
         <input
           type="text"
           className="ticket-chat-input"
-          placeholder="Escribe un mensaje..."
+          placeholder={isClosed ? "Este chat ha finalizado..." : "Escribe un mensaje..."}
           value={nuevoMensaje}
           onChange={(e) => setNuevoMensaje(e.target.value)}
-          autoFocus
+          disabled={isClosed}
+          autoFocus={!isClosed}
         />
-        <button type="submit" className="ticket-chat-send-btn" title="Enviar">
+        <button type="submit" className="ticket-chat-send-btn" title="Enviar" disabled={isClosed}>
           ➤
         </button>
       </form>
